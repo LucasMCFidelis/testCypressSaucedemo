@@ -1,3 +1,6 @@
+/// <reference types="cypress-real-events" />
+
+
 declare namespace Cypress {
   interface Chainable {
     /**

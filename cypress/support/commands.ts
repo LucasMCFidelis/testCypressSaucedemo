@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import "cypress-real-events/support";
+
 import {userLogin} from "../../types/userLogin"
 
 Cypress.Commands.add(
