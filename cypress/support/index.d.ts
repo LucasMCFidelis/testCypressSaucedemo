@@ -2,7 +2,7 @@ declare namespace Cypress {
   interface Chainable {
     /**
      * Comando customizado para preencher login
-     * @example cy.fillLogin('Lucas', 'senha123')
+     * @example cy.fillLogin({username:'Lucas', password: 'senha123'})
      */
     fillLogin({username, password}: userLogin): Chainable<void>
   }
