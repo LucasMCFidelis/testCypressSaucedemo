@@ -27,9 +27,7 @@ describe("Ordenação de produtos - ", () => {
   });
 
   it("ordenar por ordem alfabética crescente (A → Z)", () => {
-    cy.get('[data-test="product-sort-container"]').should("exist").select("az");
-
-    cy.wait(1000);
+    cy.changeFilter("az")
 
     cy.get('[data-test="inventory-container"]')
       .find('[data-test="inventory-item"]')
@@ -42,9 +40,7 @@ describe("Ordenação de produtos - ", () => {
   });
 
   it("ordenar por ordem alfabética decrescente (Z → A)", () => {
-    cy.get('[data-test="product-sort-container"]').should("exist").select("za");
-
-    cy.wait(1000);
+    cy.changeFilter("za")
 
     cy.get('[data-test="inventory-container"]')
       .find('[data-test="inventory-item"]')
@@ -57,11 +53,7 @@ describe("Ordenação de produtos - ", () => {
   });
 
   it("ordenar por menor preço (Menor → Maior)", () => {
-    cy.get('[data-test="product-sort-container"]')
-      .should("exist")
-      .select("lohi");
-
-    cy.wait(1000);
+    cy.changeFilter("lohi")
 
     cy.get('[data-test="inventory-container"]')
       .find('[data-test="inventory-item"]')
@@ -74,11 +66,7 @@ describe("Ordenação de produtos - ", () => {
   });
 
   it("ordenar por maior preço (Maior → Menor)", () => {
-    cy.get('[data-test="product-sort-container"]')
-      .should("exist")
-      .select("hilo");
-
-    cy.wait(1000);
+    cy.changeFilter('hilo')
 
     cy.get('[data-test="inventory-container"]')
       .find('[data-test="inventory-item"]')

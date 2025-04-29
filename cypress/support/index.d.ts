@@ -8,5 +8,11 @@ declare namespace Cypress {
      * @example cy.fillLogin({username:'Lucas', password: 'senha123'})
      */
     fillLogin({username, password}: userLogin): Chainable<void>
+
+    /**
+     * Comando customizado para alternar entre os filtros de classificação
+     * @example cy.changeFilter('hilo')
+     */
+    changeFilter(filter: string)
   }
 }
