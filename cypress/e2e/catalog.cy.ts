@@ -20,7 +20,7 @@ function getProductPrices($products: JQuery<HTMLElement>) {
 
 describe("Ordenação de produtos - ", () => {
   beforeEach(() => {
-    cy.login()
+    cy.login();
   });
 
   it("ordenar por ordem alfabética crescente (A → Z)", () => {
@@ -73,5 +73,59 @@ describe("Ordenação de produtos - ", () => {
         const ordered = [...prices].sort((a, b) => b - a);
         expect(prices).to.deep.equal(ordered);
       });
+  });
+});
+
+describe("Detalhes de um produto - ", () => {
+  beforeEach(() => {
+    cy.login();
+
+    cy.get(
+      '[data-test="item-4-title-link"] > [data-test="inventory-item-name"]'
+    )
+      .invoke("text")
+      .then((text) => {
+        cy.wrap(text.trim()).as("selectedProduct");
+      });
+
+    cy.get(
+      '[data-test="item-4-title-link"] > [data-test="inventory-item-name"]'
+    ).click();
+  });
+
+  it("abrir detalhes de um produto", () => {
+    cy.url().should("include", "?id=");
+  });
+
+  it("voltar para lista de produtos", () => {
+    cy.get('[data-test="back-to-products"]').click();
+    expect(cy.get('[data-test="inventory-container"]').should("be.visible"));
+  });
+
+  it("adicionar ao carrinho", function () {
+    cy.get('[data-test="add-to-cart"]').first().click();
+    cy.get('[data-test="shopping-cart-link"]').click();
+
+    cy.get('[data-test="cart-list"]')
+      .find('[data-test="inventory-item"]')
+      .should("have.length", 1)
+      .first()
+      .within(() => {
+        cy.get('[data-test="inventory-item-name"]')
+          .invoke("text")
+          .then((text) => {
+            expect(text.trim()).to.equal(this.selectedProduct);
+          });
+      });
+  });
+
+  it("remover do carrinho", () => {
+    cy.get('[data-test="add-to-cart"]').click();
+    cy.get('[data-test="remove"]').click();
+    cy.get('[data-test="shopping-cart-link"]').click();
+
+    cy.get('[data-test="cart-list"]')
+      .find('[data-test="inventory-item"]')
+      .should("not.exist");
   });
 });
