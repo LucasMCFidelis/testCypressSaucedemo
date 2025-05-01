@@ -33,10 +33,7 @@ describe("Comprar de item - ", () => {
     };
 
     beforeEach(() => {
-      cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').should(
-        "be.visible"
-      );
-      cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click();
+      cy.addItemToCart('[data-test="add-to-cart-sauce-labs-backpack"]')
       cy.openCart();
       cy.get('[data-test="checkout"]').click();
       cy.url().should("contain", "checkout-step-one");

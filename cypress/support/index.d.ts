@@ -27,10 +27,22 @@ declare namespace Cypress {
       cursorTypeRequired: string
     ): Chainable<void>;
 
+     /**
+     * Comando personalizado para adicionar item ao carrinho
+     * @example cy.addItemToCart(item: "[data-test="add-to-cart-sauce-labs-backpack"]")
+     */
+    addItemToCart(item: string)
+
+    /**
+     * Comando personalizado para preencher formulário de checkout
+     * @example cy.fillCheckout({firstName: "Lucas", lastName: "Fidelis", postalCode: "00000000",})
+     */
     fillCheckout({
       firstName,
       lastName,
       postalCode,
     }: userCheckout): Chainable<void>;
+
+    openMenu(): Chainable<void>;
   }
 }
