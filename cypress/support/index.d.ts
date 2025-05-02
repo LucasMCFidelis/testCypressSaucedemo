@@ -24,7 +24,7 @@ declare namespace Cypress {
      */
     checkCursorType(
       elementSelector: string,
-      cursorTypeRequired: string
+      cursorTypeRequired: string = "pointer"
     ): Chainable<void>;
 
      /**

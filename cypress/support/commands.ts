@@ -31,7 +31,7 @@ Cypress.Commands.add("changeFilter", (filter: string) => {
 
 Cypress.Commands.add(
   "checkCursorType",
-  (elementSelector: string, cursorTypeRequired) => {
+  (elementSelector: string, cursorTypeRequired:string = "pointer") => {
     cy.get(elementSelector)
       .invoke("css", "cursor")
       .then((cursor) => {
