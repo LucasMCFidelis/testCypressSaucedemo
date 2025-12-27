@@ -1,58 +1,61 @@
+import { BasePage } from "..";
 import { userLogin } from "../../../types/userLogin";
+import { Keyboard } from "../../support/accessibility/keyboard";
+import { loginSelectors } from "../../support/constants/login.constants";
 
-class Login {
-  userNameValid = Cypress.env("userNameValid");
-  passwordValid = Cypress.env("passwordValid");
-  userNameInvalid = "invalid_user";
-  passwordInvalid = "invalid_user_password";
-
-  checkoutToPage() {
+class LoginPage extends BasePage {
+  visit() {
     cy.visit("/");
   }
 
-  selectUserNameInput(){
-    return cy.get('[data-test="username"]')
-  }
-  selectPasswordInput(){
-    return cy.get('[data-test="password"]')
-  }
-  selectErrorMessageContainer(){
-    return cy.get(".error-message-container")
+  loginContainer() {
+    return cy.get(loginSelectors.loginContainer);
   }
 
-  fillLogin({ username, password }: userLogin) {
+  userNameInput() {
+    return cy.get(loginSelectors.username);
+  }
+
+  passwordInput() {
+    return cy.get(loginSelectors.password);
+  }
+
+  loginButton() {
+    return cy.get(loginSelectors.loginButton);
+  }
+
+  errorMessage() {
+    return cy.get(loginSelectors.errorMessage);
+  }
+
+  fillUserNameInput(username?: string) {
     if (username) {
-      this.selectUserNameInput().type(username);
+      this.userNameInput().type(username);
     }
+  }
+  fillPasswordInput(password?: string) {
     if (password) {
-      this.selectPasswordInput().type(password);
+      this.passwordInput().type(password);
     }
   }
 
-  clickInLoginButton(){
-    cy.get('[data-test="login-button"]').click()
+  fillForm({ username, password }: userLogin) {
+    this.fillUserNameInput(username);
+    this.fillPasswordInput(password);
   }
 
-  loginValidCredentials() {
-    this.checkoutToPage();
-    this.fillLogin({
-      username: Cypress.env("userNameValid"),
-      password: Cypress.env("passwordValid"),
-    });
-    this.clickInLoginButton()
-    cy.get('[data-test="inventory-container"]').should("be.visible");
+  submit() {
+    this.loginButton().click();
   }
 
-  loginInvalidCredentials({
-    username,
-    password,
-    expectMessage,
-  }: userLogin & { expectMessage: string }) {
-    this.checkoutToPage();
-    this.fillLogin({ username, password });
-    this.clickInLoginButton()
-    this.selectErrorMessageContainer().should("contain", expectMessage);
+  submitWithEnter() {
+    this.loginButton().focus();
+    Keyboard.enter();
+  }
+
+  shouldShowErrorText(text: string) {
+    this.errorMessage().should("contain", text);
   }
 }
 
-export default new Login();
+export default new LoginPage();

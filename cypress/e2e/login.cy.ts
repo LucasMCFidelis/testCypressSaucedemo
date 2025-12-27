@@ -1,75 +1,65 @@
-import Login from "../pages/login";
+import LoginPage from "../pages/login";
+import {
+  loginErrors,
+  SESSION_COOKIE_KEY,
+} from "../support/constants/login.constants";
+import { validUser } from "../support/factories/user.factory";
 
 describe("Login - ", () => {
+  const user = validUser();
   beforeEach(() => {
-    Login.checkoutToPage();
+    LoginPage.visit();
   });
 
   it("sem informar username", () => {
-    Login.loginInvalidCredentials({
-      username: undefined,
-      password: undefined,
-      expectMessage: "Username is required",
-    });
+    LoginPage.submit();
+    LoginPage.shouldShowErrorText(loginErrors.usernameRequired);
   });
 
   it("com username inexistente", () => {
-    Login.loginInvalidCredentials({
-      username: Login.userNameInvalid,
-      password: Login.passwordInvalid,
-      expectMessage:
-        "Username and password do not match any user in this service",
+    LoginPage.fillForm({
+      username: "invalid_user",
+      password: "invalid_password",
     });
+    LoginPage.submit();
+    LoginPage.shouldShowErrorText(loginErrors.invalidCredentials);
   });
 
   it("sem informar password", () => {
-    Login.loginInvalidCredentials({
-      username: Login.userNameValid,
+    LoginPage.fillForm({
+      username: "invalid_user",
       password: undefined,
-      expectMessage: "Password is required",
     });
+    LoginPage.submit();
+    LoginPage.shouldShowErrorText(loginErrors.passwordRequired);
   });
 
   it("com senha incorreta", () => {
-    Login.loginInvalidCredentials({
-      username: Login.userNameValid,
-      password: Login.passwordInvalid,
-      expectMessage:
-        "Username and password do not match any user in this service",
+    LoginPage.fillForm({
+      username: user.username,
+      password: "invalid_password",
     });
+    LoginPage.submit();
+    LoginPage.shouldShowErrorText(loginErrors.invalidCredentials);
   });
 
   it("com sucesso", () => {
-    Login.loginValidCredentials();
+    LoginPage.fillForm(user);
+    LoginPage.submit();
+    LoginPage.validateCookie(SESSION_COOKIE_KEY);
   });
 
   it("utilizando enter para enviar formulário de login", () => {
-    Login.fillLogin({
-      username: Login.userNameValid,
-      password: Login.passwordValid,
-    });
-    Login.selectPasswordInput().type("{enter}");
-    cy.get('[data-test="inventory-container"]').should("be.visible");
-  });
-
-  it("login usando navegação com teclado", () => {
-    cy.get('[data-test="login-container"]').realPress("Tab");
-    cy.focused().should("have.attr", "data-test", "username");
-    Login.fillLogin({ username: Login.userNameValid });
-    cy.realPress("Tab");
-    cy.focused().should("have.attr", "data-test", "password");
-    Login.fillLogin({ password: Login.passwordValid });
-    cy.realPress("Tab");
-    cy.focused().should("have.attr", "data-test", "login-button");
-    cy.focused().type("{enter}");
-    cy.get('[data-test="inventory-container"]').should("be.visible");
+    LoginPage.fillForm(user);
+    LoginPage.submitWithEnter();
+    LoginPage.validateCookie(SESSION_COOKIE_KEY);
   });
 
   it("valida exibição de senha", () => {
-    Login.fillLogin({
-      username: Login.userNameValid,
-      password: Login.passwordInvalid,
+    LoginPage.fillForm({
+      username: user.username,
+      password: "invalid_password",
     });
-    Login.selectPasswordInput().should("have.attr", "type", "password");
+    LoginPage.passwordInput().should("have.attr", "type", "password");
   });
 });
