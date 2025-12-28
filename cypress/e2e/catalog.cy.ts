@@ -1,78 +1,53 @@
-function getProductTitles($products: JQuery<HTMLElement>) {
-  return [...$products].map(
-    (product) =>
-      product
-        .querySelector('[data-test="inventory-item-name"]')
-        ?.textContent?.trim() || ""
-  );
-}
-
-function getProductPrices($products: JQuery<HTMLElement>) {
-  return [...$products].map((product) => {
-    const priceText = product
-      .querySelector('[data-test="inventory-item-price"]')
-      ?.textContent?.trim()
-      .replace("$", "");
-
-    return priceText ? parseFloat(priceText) : 0;
-  });
-}
+import LoginPage from "../pages/login";
+import CatalogHome from "../pages/catalog/catalogHome";
+import { validUser } from "../support/factories/user.factory";
 
 describe("Ordenação de produtos - ", () => {
   beforeEach(() => {
-    cy.login();
+    LoginPage.visit()
+    LoginPage.fillForm(validUser());
+    LoginPage.submit()
+    CatalogHome.validateUrl("/inventory");
   });
 
   it("ordenar por ordem alfabética crescente (A → Z)", () => {
-    cy.changeFilter("az");
+    CatalogHome.changeFilter("titleAsc");
 
-    cy.get('[data-test="inventory-container"]')
-      .find('[data-test="inventory-item"]')
-      .then(($products) => {
-        const titles = getProductTitles($products);
+    CatalogHome.getProductTitles().then((titles) => {
+      const sortedTitles = [...titles].sort((a, b) => a.localeCompare(b));
 
-        const ordenado = [...titles].sort((a, b) => a.localeCompare(b));
-        expect(titles).to.deep.equal(ordenado);
-      });
+      CatalogHome.validateItemsOrdination(titles, sortedTitles);
+    });
   });
 
   it("ordenar por ordem alfabética decrescente (Z → A)", () => {
-    cy.changeFilter("za");
+    CatalogHome.changeFilter("titleDesc");
 
-    cy.get('[data-test="inventory-container"]')
-      .find('[data-test="inventory-item"]')
-      .then(($products) => {
-        const titles = getProductTitles($products);
+    CatalogHome.getProductTitles().then((titles) => {
+      const sortedTitles = [...titles].sort((a, b) => b.localeCompare(a));
 
-        const ordered = [...titles].sort((a, b) => b.localeCompare(a));
-        expect(titles).to.deep.equal(ordered);
-      });
+      CatalogHome.validateItemsOrdination(titles, sortedTitles);
+    });
   });
 
   it("ordenar por menor preço (Menor → Maior)", () => {
-    cy.changeFilter("lohi");
+    CatalogHome.changeFilter("priceAsc");
 
-    cy.get('[data-test="inventory-container"]')
-      .find('[data-test="inventory-item"]')
-      .then(($products) => {
-        const prices = getProductPrices($products);
+    CatalogHome.getProductPrices().then((prices) => {
+      const sortedPrices = [...prices].sort((a, b) => a - b);
 
-        const ordered = [...prices].sort((a, b) => a - b);
-        expect(prices).to.deep.equal(ordered);
-      });
+      CatalogHome.validateItemsOrdination(prices, sortedPrices);
+    });
   });
 
   it("ordenar por maior preço (Maior → Menor)", () => {
-    cy.changeFilter("hilo");
+    CatalogHome.changeFilter("priceDesc");
 
-    cy.get('[data-test="inventory-container"]')
-      .find('[data-test="inventory-item"]')
-      .then(($products) => {
-        const prices = getProductPrices($products);
+    CatalogHome.getProductPrices().then((prices) => {
+      const sortedPrices = [...prices].sort((a, b) => b - a);
 
-        const ordered = [...prices].sort((a, b) => b - a);
-        expect(prices).to.deep.equal(ordered);
-      });
+      CatalogHome.validateItemsOrdination(prices, sortedPrices);
+    });
   });
 });
 
