@@ -4,9 +4,7 @@ import { validUser } from "../support/factories/user.factory";
 
 describe("Ordenação de produtos - ", () => {
   beforeEach(() => {
-    LoginPage.visit()
-    LoginPage.fillForm(validUser());
-    LoginPage.submit()
+    LoginPage.loginAsValidUser(validUser())
     CatalogHome.validateUrl("/inventory");
   });
 

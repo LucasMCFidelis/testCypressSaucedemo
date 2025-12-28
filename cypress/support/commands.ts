@@ -4,11 +4,6 @@ import "cypress-real-events/support";
 
 import { userCheckout } from "../../types/userCheckout";
 
-Cypress.Commands.add("changeFilter", (filter: string) => {
-  cy.get('[data-test="product-sort-container"]').should("exist").select(filter);
-  cy.wait(1000);
-});
-
 Cypress.Commands.add(
   "checkCursorType",
   (elementSelector: string, cursorTypeRequired:string = "pointer") => {

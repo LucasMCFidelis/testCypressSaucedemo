@@ -53,6 +53,12 @@ class LoginPage extends BasePage {
     Keyboard.enter();
   }
 
+  loginAsValidUser(user: userLogin) {
+    this.visit();
+    this.fillForm(user);
+    this.submit();
+  }
+
   shouldShowErrorText(text: string) {
     this.errorMessage().should("contain", text);
   }
