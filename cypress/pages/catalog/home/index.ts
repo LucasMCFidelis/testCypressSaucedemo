@@ -1,10 +1,10 @@
-import { CatalogBasePage } from ".";
+import { CatalogBasePage } from "..";
 import {
   catalogFilters,
   catalogSelectors,
-} from "../../support/constants/catalog.constants";
+} from "../../../support/constants/catalog.constants";
 
-class CatalogHome extends CatalogBasePage {
+class CatalogPage extends CatalogBasePage {
   catalogFilter() {
     return cy.get(catalogSelectors.catalogFilter);
   }
@@ -55,6 +55,15 @@ class CatalogHome extends CatalogBasePage {
   ) {
     expect(currentData).to.deep.equal(sortedData);
   }
+
+  productItemTitle(index: number) {
+    const selector = catalogSelectors.catalogItemTitle(index);
+    return cy.get(selector);
+  }
+
+  openItemDetailsToTitle(index: number) {
+    this.productItemTitle(index).click();
+  }
 }
 
-export default new CatalogHome();
+export default new CatalogPage();

@@ -1,12 +1,36 @@
 import { BasePage } from "..";
-import {
-  catalogFilters,
-  catalogSelectors,
-} from "../../support/constants/catalog.constants";
+import { catalogSelectors } from "../../support/constants/catalog.constants";
+import { globalConstants } from "../../support/constants/global.constants";
 
 export class CatalogBasePage extends BasePage {
   catalogContainer() {
     return cy.get(catalogSelectors.catalogContainer);
+  }
+
+  shoppingCart() {
+    return cy.get(globalConstants.shoppingCart);
+  }
+
+  shoppingCartBadgeValue() {
+    return this.shoppingCart().then(($cart) => {
+      const $badge = $cart.find(globalConstants.shoppingCartBadge);
+
+      if ($badge.length === 0) {
+        return 0;
+      }
+
+      return Number($badge.text());
+    });
+  }
+
+  addItemToCart(productName: string) {
+    const selector = catalogSelectors.addItemToCartButton(productName);
+    return cy.get(selector).click();
+  }
+
+  removeItemToCart(productName: string) {
+    const selector = catalogSelectors.removeItemToCartButton(productName);
+    return cy.get(selector).click();
   }
 }
 

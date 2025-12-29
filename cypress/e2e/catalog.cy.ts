@@ -1,104 +1,104 @@
 import LoginPage from "../pages/login";
-import CatalogHome from "../pages/catalog/catalogHome";
+import CatalogPage from "../pages/catalog/home";
+import ProductDetailsPage from "../pages/catalog/productDetails";
 import { validUser } from "../support/factories/user.factory";
 
 describe("Ordenação de produtos - ", () => {
   beforeEach(() => {
-    LoginPage.loginAsValidUser(validUser())
-    CatalogHome.validateUrl("/inventory");
+    LoginPage.loginAsValidUser(validUser());
+    CatalogPage.validateUrl("/inventory");
   });
 
   it("ordenar por ordem alfabética crescente (A → Z)", () => {
-    CatalogHome.changeFilter("titleAsc");
+    CatalogPage.changeFilter("titleAsc");
 
-    CatalogHome.getProductTitles().then((titles) => {
+    CatalogPage.getProductTitles().then((titles) => {
       const sortedTitles = [...titles].sort((a, b) => a.localeCompare(b));
 
-      CatalogHome.validateItemsOrdination(titles, sortedTitles);
+      CatalogPage.validateItemsOrdination(titles, sortedTitles);
     });
   });
 
   it("ordenar por ordem alfabética decrescente (Z → A)", () => {
-    CatalogHome.changeFilter("titleDesc");
+    CatalogPage.changeFilter("titleDesc");
 
-    CatalogHome.getProductTitles().then((titles) => {
+    CatalogPage.getProductTitles().then((titles) => {
       const sortedTitles = [...titles].sort((a, b) => b.localeCompare(a));
 
-      CatalogHome.validateItemsOrdination(titles, sortedTitles);
+      CatalogPage.validateItemsOrdination(titles, sortedTitles);
     });
   });
 
   it("ordenar por menor preço (Menor → Maior)", () => {
-    CatalogHome.changeFilter("priceAsc");
+    CatalogPage.changeFilter("priceAsc");
 
-    CatalogHome.getProductPrices().then((prices) => {
+    CatalogPage.getProductPrices().then((prices) => {
       const sortedPrices = [...prices].sort((a, b) => a - b);
 
-      CatalogHome.validateItemsOrdination(prices, sortedPrices);
+      CatalogPage.validateItemsOrdination(prices, sortedPrices);
     });
   });
 
   it("ordenar por maior preço (Maior → Menor)", () => {
-    CatalogHome.changeFilter("priceDesc");
+    CatalogPage.changeFilter("priceDesc");
 
-    CatalogHome.getProductPrices().then((prices) => {
+    CatalogPage.getProductPrices().then((prices) => {
       const sortedPrices = [...prices].sort((a, b) => b - a);
 
-      CatalogHome.validateItemsOrdination(prices, sortedPrices);
+      CatalogPage.validateItemsOrdination(prices, sortedPrices);
     });
   });
 });
 
 describe("Detalhes de um produto - ", () => {
-  beforeEach(() => {
-    cy.login();
+  let PRODUCT_INDEX = 5;
+  let SELECTED_PRODUCT_TITLE = "";
 
-    cy.get(
-      '[data-test="item-4-title-link"] > [data-test="inventory-item-name"]'
-    )
+  beforeEach(() => {
+    LoginPage.loginAsValidUser(validUser());
+    CatalogPage.validateUrl("/inventory");
+
+    PRODUCT_INDEX = Cypress._.random(0, 5);
+    CatalogPage.productItemTitle(PRODUCT_INDEX)
       .invoke("text")
       .then((text) => {
-        cy.wrap(text.trim()).as("selectedProduct");
+        SELECTED_PRODUCT_TITLE = text.trim();
       });
+  });
 
-    cy.get(
-      '[data-test="item-4-title-link"] > [data-test="inventory-item-name"]'
-    ).click();
+  afterEach(() => {
+    CatalogPage.shoppingCartBadgeValue().then((value) => {
+      if (value > 0) {
+        CatalogPage.removeItemToCart(SELECTED_PRODUCT_TITLE);
+      }
+    });
   });
 
   it("abrir detalhes de um produto", () => {
-    cy.url().should("include", "?id=");
+    CatalogPage.productItemTitle(PRODUCT_INDEX).click();
+    ProductDetailsPage.validateUrl(`?id=${PRODUCT_INDEX}`);
   });
 
   it("voltar para lista de produtos", () => {
-    cy.get('[data-test="back-to-products"]').click();
-    expect(cy.get('[data-test="inventory-container"]').should("be.visible"));
+    CatalogPage.productItemTitle(PRODUCT_INDEX).click();
+    ProductDetailsPage.backToCatalogButton().click();
+    expect(CatalogPage.catalogContainer().should("be.visible"));
   });
 
-  it("adicionar ao carrinho", function () {
-    cy.get('[data-test="add-to-cart"]').first().click();
-    cy.get('[data-test="shopping-cart-link"]').click();
+  it("adicionar ao carrinho", () => {
+    CatalogPage.shoppingCartBadgeValue().then((oldValue) => {
+      CatalogPage.addItemToCart(SELECTED_PRODUCT_TITLE);
 
-    cy.get('[data-test="cart-list"]')
-      .find('[data-test="inventory-item"]')
-      .should("have.length", 1)
-      .first()
-      .within(() => {
-        cy.get('[data-test="inventory-item-name"]')
-          .invoke("text")
-          .then((text) => {
-            expect(text.trim()).to.equal(this.selectedProduct);
-          });
-      });
+      CatalogPage.shoppingCartBadgeValue().should("eq", oldValue + 1);
+    });
   });
 
   it("remover do carrinho", () => {
-    cy.get('[data-test="add-to-cart"]').click();
-    cy.get('[data-test="remove"]').click();
-    cy.get('[data-test="shopping-cart-link"]').click();
+    CatalogPage.shoppingCartBadgeValue().then((oldValue) => {
+      CatalogPage.addItemToCart(SELECTED_PRODUCT_TITLE);
+      CatalogPage.removeItemToCart(SELECTED_PRODUCT_TITLE);
 
-    cy.get('[data-test="cart-list"]')
-      .find('[data-test="inventory-item"]')
-      .should("not.exist");
+      CatalogPage.shoppingCartBadgeValue().should("eq", oldValue);
+    });
   });
 });
