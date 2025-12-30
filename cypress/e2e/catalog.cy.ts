@@ -1,5 +1,6 @@
 import LoginPage from "../pages/login";
 import CatalogPage from "../pages/catalog/home";
+import Menu from "../pages/components/menu";
 import ProductDetailsPage from "../pages/catalog/productDetails";
 import { validUser } from "../support/factories/user.factory";
 
@@ -99,6 +100,16 @@ describe("Detalhes de um produto - ", () => {
       CatalogPage.removeItemToCart(SELECTED_PRODUCT_TITLE);
 
       CatalogPage.shoppingCartBadgeValue().should("eq", oldValue);
+    });
+  });
+
+  it("valida se carrinho se mantém salvo apos logout", () => {
+    Menu.open();
+    Menu.logout();
+
+    CatalogPage.shoppingCartBadgeValue().then((beforeLogoutValue) => {
+      LoginPage.loginAsValidUser(validUser());
+      CatalogPage.shoppingCartBadgeValue().should("eq", beforeLogoutValue);
     });
   });
 });
