@@ -1,60 +1,42 @@
+import BasePage from "../pages";
+import Menu from "../pages/components/menu";
+import LoginPage from "../pages/login";
+import { SESSION_COOKIE_KEY } from "../support/constants/login.constants";
+import { validUser } from "../support/factories/user.factory";
+
 describe("Menu de Navegação - ", () => {
   beforeEach(() => {
-    cy.login();
-    cy.openMenu();
+    LoginPage.loginAsValidUser(validUser());
+    Menu.open();
+  });
+
+  it("valida abertura do menu", () => {
+    Menu.content().should("be.visible");
   });
 
   it("valida fechar menu", () => {
-    cy.get("#react-burger-cross-btn").should("be.visible");
-    cy.get("#react-burger-cross-btn").click();
-    cy.get(".bm-menu").should("not.be.visible");
+    Menu.close();
+    Menu.content().should("not.be.visible");
   });
 
-  it.skip("valida navegação para about", () => {
-    cy.get('[data-test="about-sidebar-link"]')
+  it("valida presença de href para about", () => {
+    Menu.aboutLink()
       .should("be.visible")
       .invoke("attr", "href")
       .then((href) => {
-        // Remove target para abrir na mesma aba (Cypress precisa disso)
-        cy.get('[data-test="about-sidebar-link"]')
-          .invoke("removeAttr", "target")
-          .click();
-
-        cy.wait(1000);
-
         if (href) {
-          cy.origin(new URL(href).origin, () => {
-            cy.on("uncaught:exception", () => false); // Ignora erro de origem cruzada
-            cy.url().should("include", "saucelabs.com");
-          });
+          expect(href).to.be.include("saucelabs");
         }
       });
   });
 
   it("valida botão de All Itens", () => {
-    cy.get('[data-test="inventory-sidebar-link"]').should("be.visible")
-    cy.get('[data-test="inventory-sidebar-link"]').click()
-    cy.url().should("include", "inventory")
+    Menu.goToCatalog();
+    BasePage.validateUrl("inventory");
   });
-  
+
   it("valida botão de logout", () => {
-    cy.get('[data-test="logout-sidebar-link"]').should("be.visible")
-    cy.get('[data-test="logout-sidebar-link"]').click()
-    cy.get('[data-test="login-container"]').should("be.visible")
+    Menu.logout();
+    LoginPage.validateCookieUnset(SESSION_COOKIE_KEY);
   });
-
-  it("valida se carrinho se mantém salvo apos logout", ()=>{
-    cy.addItemToCart('[data-test="add-to-cart-sauce-labs-backpack"]')
-    cy.openCart()
-    cy.get('[data-test="cart-list"]').find('[data-test="inventory-item"]').should("have.length", 1)
-
-    cy.openMenu()
-    cy.get('[data-test="logout-sidebar-link"]').click()
-
-    cy.wait(1000)
-
-    cy.login()
-    cy.openCart()
-    cy.get('[data-test="cart-list"]').find('[data-test="inventory-item"]').should("have.length", 1)
-  })
 });

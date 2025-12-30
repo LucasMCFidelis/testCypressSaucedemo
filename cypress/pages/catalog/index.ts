@@ -1,6 +1,6 @@
 import { BasePage } from "..";
 import { catalogSelectors } from "../../support/constants/catalog.constants";
-import { globalConstants } from "../../support/constants/global.constants";
+import { globalSelectors } from "../../support/constants/global.constants";
 
 export class CatalogBasePage extends BasePage {
   catalogContainer() {
@@ -8,12 +8,12 @@ export class CatalogBasePage extends BasePage {
   }
 
   shoppingCart() {
-    return cy.get(globalConstants.shoppingCart);
+    return cy.get(globalSelectors.shoppingCart);
   }
 
   shoppingCartBadgeValue() {
     return this.shoppingCart().then(($cart) => {
-      const $badge = $cart.find(globalConstants.shoppingCartBadge);
+      const $badge = $cart.find(globalSelectors.shoppingCartBadge);
 
       if ($badge.length === 0) {
         return 0;
