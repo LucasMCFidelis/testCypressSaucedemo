@@ -104,12 +104,17 @@ describe("Detalhes de um produto - ", () => {
   });
 
   it("valida se carrinho se mantém salvo apos logout", () => {
+    let beforeLogoutValue: number;
+    CatalogPage.shoppingCartBadgeValue().then((oldValue) => {
+      beforeLogoutValue = oldValue;
+    });
     Menu.open();
     Menu.logout();
 
-    CatalogPage.shoppingCartBadgeValue().then((beforeLogoutValue) => {
-      LoginPage.loginAsValidUser(validUser());
-      CatalogPage.shoppingCartBadgeValue().should("eq", beforeLogoutValue);
+    LoginPage.loginAsValidUser(validUser());
+
+    CatalogPage.shoppingCartBadgeValue().then((currentValue) => {
+      expect(currentValue).equal(beforeLogoutValue);
     });
   });
 });
