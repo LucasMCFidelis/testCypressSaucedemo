@@ -1,8 +1,6 @@
 export const globalSelectors = {
   shoppingCart: '[data-test="shopping-cart-link"]',
   shoppingCartBadge: '[data-test="shopping-cart-badge"]',
-  footer: '[data-test="footer"]',
-  footerText: '[data-test="footer-copy"]',
 };
 
 export const menuOptionsSelectors = {
@@ -12,4 +10,9 @@ export const menuOptionsSelectors = {
   about: '[data-test="about-sidebar-link"]',
   catalog: '[data-test="inventory-sidebar-link"]',
   closeMenu: "#react-burger-menu-btn",
+};
+
+export const footerSelectors = {
+  container: '[data-test="footer"]',
+  footerText: '[data-test="footer-copy"]',
 };

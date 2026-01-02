@@ -1,5 +1,3 @@
-import { globalSelectors } from "../support/constants/global.constants";
-
 export class BasePage {
   validateUrl(path: string) {
     cy.url().should("contain", path);
@@ -11,10 +9,6 @@ export class BasePage {
 
   validateCookieUnset(key: string) {
     cy.getCookie(key).should("not.exist");
-  }
-
-  footer() {
-    return cy.get(globalSelectors.footer);
   }
 }
 

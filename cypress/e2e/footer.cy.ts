@@ -1,20 +1,30 @@
+import Footer from "../pages/components/footer";
+import LoginPage from "../pages/login";
+import { validUser } from "../support/factories/user.factory";
+
 describe("Validação do rodapé do site", () => {
   beforeEach(() => {
-    cy.login();
+    LoginPage.loginAsValidUser(validUser());
   });
 
   it("Valida exibição do rodapé", () => {
-    cy.get('[data-test="footer"]').should("be.visible");
+    Footer.container().should("be.visible");
   });
 
-  it.skip("Valida termos de serviço", () => {
-    cy.get('[data-test="footer-copy"]').should("contain.text", "Terms of Service");
+  it("Valida termos de serviço", () => {
+    cy.get('[data-test="footer-copy"]').should(
+      "contain.text",
+      "Terms of Service"
+    );
     cy.contains('[data-test="footer-copy"]', "Terms of Service").click();
     cy.url().should("contain", "terms");
   });
 
-  it.skip("Valida termos de privacidade", () => {
-    cy.get('[data-test="footer-copy"]').should("contain.text", "Privacy Policy");
+  it("Valida termos de privacidade", () => {
+    cy.get('[data-test="footer-copy"]').should(
+      "contain.text",
+      "Privacy Policy"
+    );
     cy.contains('[data-test="footer-copy"]', "Privacy Policy").click();
     cy.url().should("contain", "privacy");
   });
@@ -29,7 +39,7 @@ describe("Validação do rodapé do site", () => {
     const testedButtons: Set<string> = new Set();
 
     before(() => {
-      cy.login()
+      cy.login();
       expectedButtons.forEach(({ dataTest }) => {
         cy.get(`[data-test="${dataTest}"]`).should("exist");
       });
