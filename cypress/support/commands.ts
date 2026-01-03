@@ -6,7 +6,7 @@ import { userCheckout } from "../../types/userCheckout";
 
 Cypress.Commands.add(
   "checkCursorType",
-  (elementSelector: string, cursorTypeRequired:string = "pointer") => {
+  (elementSelector: string, cursorTypeRequired: string = "pointer") => {
     cy.get(elementSelector)
       .invoke("css", "cursor")
       .then((cursor) => {
@@ -24,13 +24,6 @@ Cypress.Commands.add(
       });
   }
 );
-
-Cypress.Commands.add("addItemToCart", (item: string)=>{
-  cy.get(item).should(
-    "be.visible"
-  );
-  cy.get(item).click();
-})
 
 Cypress.Commands.add("openCart", () => {
   cy.get('[data-test="shopping-cart-link"]').should("be.visible");
@@ -57,10 +50,3 @@ Cypress.Commands.add(
     }
   }
 );
-
-Cypress.Commands.add("openMenu", () => {
-  cy.get("#react-burger-menu-btn").should("be.visible");
-  cy.checkCursorType("#react-burger-menu-btn", "pointer");
-  cy.get("#react-burger-menu-btn").click();
-  cy.get(".bm-menu").should("be.visible");
-});
