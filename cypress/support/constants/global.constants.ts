@@ -1,3 +1,5 @@
+import {FooterButton} from "../../../types/footerButton"
+
 export const globalSelectors = {
   shoppingCart: '[data-test="shopping-cart-link"]',
   shoppingCartBadge: '[data-test="shopping-cart-badge"]',
@@ -14,5 +16,13 @@ export const menuOptionsSelectors = {
 
 export const footerSelectors = {
   container: '[data-test="footer"]',
-  footerText: '[data-test="footer-copy"]',
+  copyright: '[data-test="footer-copy"]',
+  termsServiceTextLink: /terms/i,
+  privacyPolicyTextLink: /privacy/i,
 };
+
+export const expectedFooterButtons: Array<FooterButton> = [
+  { dataTest: "social-twitter", expectedHost: "twitter.com" },
+  { dataTest: "social-facebook", expectedHost: "facebook.com" },
+  { dataTest: "social-linkedin", expectedHost: "linkedin.com" },
+];
