@@ -1,4 +1,4 @@
-import { menuOptionsSelectors } from "../../support/constants/global.constants";
+import { headerSelectors } from "../../support/constants/global.constants";
 
 class Menu {
   private clickMenuOption(selector: string) {
@@ -8,27 +8,27 @@ class Menu {
   }
 
   open() {
-    this.clickMenuOption(menuOptionsSelectors.openMenu);
+    this.clickMenuOption(headerSelectors.menuOptionsSelectors.openMenu);
   }
 
   close() {
-    this.clickMenuOption(menuOptionsSelectors.closeMenu);
+    this.clickMenuOption(headerSelectors.menuOptionsSelectors.closeMenu);
   }
 
   logout() {
-    this.clickMenuOption(menuOptionsSelectors.logout);
+    this.clickMenuOption(headerSelectors.menuOptionsSelectors.logout);
   }
 
   goToCatalog() {
-    this.clickMenuOption(menuOptionsSelectors.catalog);
+    this.clickMenuOption(headerSelectors.menuOptionsSelectors.catalog);
   }
 
   aboutLink() {
-    return cy.get(menuOptionsSelectors.about);
+    return cy.get(headerSelectors.menuOptionsSelectors.about);
   }
 
   content() {
-    return cy.get(menuOptionsSelectors.contentMenu);
+    return cy.get(headerSelectors.menuOptionsSelectors.contentMenu);
   }
 }
 

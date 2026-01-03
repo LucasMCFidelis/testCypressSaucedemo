@@ -3,6 +3,7 @@ import CatalogPage from "../pages/catalog/home";
 import Menu from "../pages/components/menu";
 import ProductDetailsPage from "../pages/catalog/productDetails";
 import { validUser } from "../support/factories/user.factory";
+import Header from "../pages/components/header";
 
 describe("Ordenação de produtos - ", () => {
   beforeEach(() => {
@@ -68,7 +69,7 @@ describe("Detalhes de um produto - ", () => {
   });
 
   afterEach(() => {
-    CatalogPage.shoppingCartBadgeValue().then((value) => {
+    Header.shoppingCartBadgeValue().then((value) => {
       if (value > 0) {
         CatalogPage.removeItemToCart(SELECTED_PRODUCT_TITLE);
       }
@@ -87,25 +88,25 @@ describe("Detalhes de um produto - ", () => {
   });
 
   it("adicionar ao carrinho", () => {
-    CatalogPage.shoppingCartBadgeValue().then((oldValue) => {
+    Header.shoppingCartBadgeValue().then((oldValue) => {
       CatalogPage.addItemToCart(SELECTED_PRODUCT_TITLE);
 
-      CatalogPage.shoppingCartBadgeValue().should("eq", oldValue + 1);
+      Header.shoppingCartBadgeValue().should("eq", oldValue + 1);
     });
   });
 
   it("remover do carrinho", () => {
-    CatalogPage.shoppingCartBadgeValue().then((oldValue) => {
+    Header.shoppingCartBadgeValue().then((oldValue) => {
       CatalogPage.addItemToCart(SELECTED_PRODUCT_TITLE);
       CatalogPage.removeItemToCart(SELECTED_PRODUCT_TITLE);
 
-      CatalogPage.shoppingCartBadgeValue().should("eq", oldValue);
+      Header.shoppingCartBadgeValue().should("eq", oldValue);
     });
   });
 
   it("valida se carrinho se mantém salvo apos logout", () => {
     let beforeLogoutValue: number;
-    CatalogPage.shoppingCartBadgeValue().then((oldValue) => {
+    Header.shoppingCartBadgeValue().then((oldValue) => {
       beforeLogoutValue = oldValue;
     });
     Menu.open();
@@ -113,7 +114,7 @@ describe("Detalhes de um produto - ", () => {
 
     LoginPage.loginAsValidUser(validUser());
 
-    CatalogPage.shoppingCartBadgeValue().then((currentValue) => {
+    Header.shoppingCartBadgeValue().then((currentValue) => {
       expect(currentValue).equal(beforeLogoutValue);
     });
   });

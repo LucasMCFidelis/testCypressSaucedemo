@@ -1,17 +1,19 @@
-import {FooterButton} from "../../../types/footerButton"
+import { FooterButton } from "../../../types/footerButton";
 
-export const globalSelectors = {
-  shoppingCart: '[data-test="shopping-cart-link"]',
-  shoppingCartBadge: '[data-test="shopping-cart-badge"]',
-};
-
-export const menuOptionsSelectors = {
+const menuOptionsSelectors = {
   openMenu: "#react-burger-menu-btn",
   contentMenu: ".bm-menu-wrap",
   logout: '[data-test="logout-sidebar-link"]',
   about: '[data-test="about-sidebar-link"]',
   catalog: '[data-test="inventory-sidebar-link"]',
   closeMenu: "#react-burger-menu-btn",
+};
+
+export const headerSelectors = {
+  primary: '[data-test="primary-header"]',
+  shoppingCart: '[data-test="shopping-cart-link"]',
+  shoppingCartBadge: '[data-test="shopping-cart-badge"]',
+  menuOptionsSelectors,
 };
 
 export const footerSelectors = {
