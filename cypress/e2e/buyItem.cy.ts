@@ -7,6 +7,8 @@ import { validCheckout } from "../support/factories/checkout.factory";
 import CheckoutStepOnePage from "../pages/checkout/stepOne";
 import BasePage from "../pages";
 import { checkoutErrors } from "../support/constants/checkout.constants";
+import CheckoutStepTwoPage from "../pages/checkout/stepTwo";
+import CheckoutCompletedPage from "../pages/checkout/completed";
 
 describe("Comprar de item - ", () => {
   beforeEach(() => {
@@ -110,47 +112,35 @@ describe("Comprar de item - ", () => {
       });
 
       it("cancelar checkout", () => {
-        cy.get('[data-test="cancel"]').click();
-        cy.url().should("contain", "inventory");
+        CheckoutStepTwoPage.cancelCheckout();
+        BasePage.validateUrl("inventory");
 
-        // Confirma se o item permanece no carrinho
-        cy.openCart();
-        cy.get('[data-test="cart-list"]')
-          .find('[data-test="inventory-item"]')
-          .should("have.length", 1);
+        CartPage.visit();
+        CartPage.cartItemsList().should("have.length", 1);
       });
 
       it("validar calculo do total", () => {
         let subTotal = 0;
         let taxa = 0;
 
-        cy.get('[data-test="subtotal-label"]')
-          .invoke("text")
-          .then((text) => {
-            subTotal = parseFloat(text.replace(/[^\d.]/g, ""));
-          });
-
-        cy.get('[data-test="tax-label"]')
-          .invoke("text")
-          .then((text) => {
-            taxa = parseFloat(text.replace(/[^\d.]/g, ""));
-          });
-
-        cy.get('[data-test="total-label"]')
-          .invoke("text")
-          .then((text) => {
-            const total = parseFloat(text.replace(/[^\d.]/g, ""));
-            expect(total).to.be.closeTo(subTotal + taxa, 0.01);
-          });
+        CheckoutStepTwoPage.subTotalValue().then((value) => {
+          subTotal = value;
+        });
+        CheckoutStepTwoPage.taxValue().then((value) => {
+          taxa = value;
+        });
+        CheckoutStepTwoPage.totalValue().then((total) => {
+          expect(total).to.be.closeTo(subTotal + taxa, 0.01);
+        });
       });
 
       it("finalizar compra", () => {
-        cy.get('[data-test="finish"]').click();
-        cy.url().should("contain", "checkout-complete");
+        CheckoutStepTwoPage.finishCheckout();
+        BasePage.validateUrl("checkout-complete");
 
         // Volta para seção de produtos
-        cy.get('[data-test="back-to-products"]').click();
-        cy.url().should("contain", "inventory");
+        CheckoutCompletedPage.backToProducts();
+        BasePage.validateUrl("inventory");
       });
     });
   });
