@@ -3,6 +3,10 @@ import { checkoutSelectors } from "../../../support/constants/checkout.constants
 import { CheckoutBasePage } from "..";
 
 export class CheckoutStepOnePage extends CheckoutBasePage {
+  validatePage() {
+    this.validateUrl("checkout-step-one");
+  }
+
   firstName() {
     return cy.get(checkoutSelectors.stepOne.firstName);
   }

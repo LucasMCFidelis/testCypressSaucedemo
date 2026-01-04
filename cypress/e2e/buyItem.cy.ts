@@ -17,7 +17,7 @@ describe("Comprar de item - ", () => {
 
   it("valida botão do carrinho", () => {
     Header.shoppingCart().click();
-    CartPage.validateUrl("cart");
+    CartPage.validatePage();
   });
 
   it("com carrinho vazio", () => {
@@ -26,14 +26,14 @@ describe("Comprar de item - ", () => {
     CartPage.cartItemsList().should("not.exist");
 
     CartPage.goToCheckout();
-    BasePage.validateUrl("cart");
+    CartPage.validatePage();
   });
 
   it("valida botão de retornar para shopping", () => {
     CartPage.visit();
 
     CartPage.backToCatalog();
-    BasePage.validateUrl("inventory");
+    CatalogPage.validatePage();
   });
 
   describe("Checkout da compra - ", () => {
@@ -43,13 +43,13 @@ describe("Comprar de item - ", () => {
       CatalogPage.addItemToCart("sauce-labs-backpack");
       CartPage.visit();
       CartPage.goToCheckout();
-      CartPage.validateUrl("checkout-step-one");
+      CheckoutStepOnePage.validatePage();
     });
 
     describe("primeira etapa - ", () => {
       it("Cancelar checkout", () => {
         CheckoutStepOnePage.cancelCheckout();
-        BasePage.validateUrl("cart");
+        CartPage.validatePage();
       });
 
       it("sem preencher o formulário", () => {
@@ -62,7 +62,7 @@ describe("Comprar de item - ", () => {
       it("com dados validos", () => {
         CheckoutStepOnePage.fillCheckout(checkoutData);
         CheckoutStepOnePage.nextStep();
-        BasePage.validateUrl("checkout-step-two");
+        CheckoutStepTwoPage.validatePage();
       });
 
       it("com firstName vazio", () => {
@@ -108,12 +108,12 @@ describe("Comprar de item - ", () => {
       beforeEach(() => {
         CheckoutStepOnePage.fillCheckout(checkoutData);
         CheckoutStepOnePage.nextStep();
-        BasePage.validateUrl("checkout-step-two");
+        CheckoutStepTwoPage.validatePage();
       });
 
       it("cancelar checkout", () => {
         CheckoutStepTwoPage.cancelCheckout();
-        BasePage.validateUrl("inventory");
+        CatalogPage.validatePage();
 
         CartPage.visit();
         CartPage.cartItemsList().should("have.length", 1);
@@ -136,11 +136,11 @@ describe("Comprar de item - ", () => {
 
       it("finalizar compra", () => {
         CheckoutStepTwoPage.finishCheckout();
-        BasePage.validateUrl("checkout-complete");
+        CheckoutCompletedPage.validatePage();
 
         // Volta para seção de produtos
         CheckoutCompletedPage.backToProducts();
-        BasePage.validateUrl("inventory");
+        CatalogPage.validatePage();
       });
     });
   });

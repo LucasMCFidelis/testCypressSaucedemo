@@ -5,6 +5,10 @@ import {
 } from "../../../support/constants/catalog.constants";
 
 class CatalogPage extends CatalogBasePage {
+  validatePage(): void {
+    this.validateUrl("inventory");
+  }
+  
   catalogFilter() {
     return cy.get(catalogSelectors.catalogFilter);
   }

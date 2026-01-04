@@ -1,6 +1,8 @@
 import BasePage from "../pages";
 import Footer from "../pages/components/footer";
 import LoginPage from "../pages/login";
+import TermsServicePage from "../pages/termsService";
+import PrivacyPolicyPage from "../pages/privacyPolicy";
 import {
   expectedFooterButtons,
   footerSelectors,
@@ -18,12 +20,12 @@ describe("Validação do rodapé do site", () => {
 
   it("Valida termos de serviço", () => {
     Footer.clickLink(footerSelectors.termsServiceTextLink);
-    BasePage.validateUrl("terms");
+    TermsServicePage.validatePage();
   });
 
   it("Valida termos de privacidade", () => {
     Footer.clickLink(footerSelectors.privacyPolicyTextLink);
-    BasePage.validateUrl("policy");
+    PrivacyPolicyPage.validatePage();
   });
 
   describe("Valida botões para redes sociais", () => {

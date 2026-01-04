@@ -1,10 +1,10 @@
 import { BasePage } from "..";
 import { checkoutSelectors } from "../../support/constants/checkout.constants";
 
-export class CheckoutBasePage extends BasePage {
+export abstract class CheckoutBasePage extends BasePage {
   cancelCheckout(){
     cy.get(checkoutSelectors.cancelCheckout).should("be.visible").click();
   }
 }
 
-export default new CheckoutBasePage();
+export default CheckoutBasePage;

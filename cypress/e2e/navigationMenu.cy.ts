@@ -1,4 +1,4 @@
-import BasePage from "../pages";
+import CatalogPage from "../pages/catalog/home";
 import Menu from "../pages/components/menu";
 import LoginPage from "../pages/login";
 import { SESSION_COOKIE_KEY } from "../support/constants/login.constants";
@@ -32,7 +32,7 @@ describe("Menu de Navegação - ", () => {
 
   it("valida botão de All Itens", () => {
     Menu.goToCatalog();
-    BasePage.validateUrl("inventory");
+    CatalogPage.validatePage();
   });
 
   it("valida botão de logout", () => {

@@ -8,7 +8,7 @@ import Header from "../pages/components/header";
 describe("Ordenação de produtos - ", () => {
   beforeEach(() => {
     LoginPage.loginAsValidUser(validUser());
-    CatalogPage.validateUrl("/inventory");
+    CatalogPage.validatePage();
   });
 
   it("ordenar por ordem alfabética crescente (A → Z)", () => {
@@ -58,7 +58,7 @@ describe("Detalhes de um produto - ", () => {
 
   beforeEach(() => {
     LoginPage.loginAsValidUser(validUser());
-    CatalogPage.validateUrl("/inventory");
+    CatalogPage.validatePage();
 
     PRODUCT_INDEX = Cypress._.random(0, 5);
     CatalogPage.productItemTitle(PRODUCT_INDEX)
@@ -78,11 +78,13 @@ describe("Detalhes de um produto - ", () => {
 
   it("abrir detalhes de um produto", () => {
     CatalogPage.productItemTitle(PRODUCT_INDEX).click();
-    ProductDetailsPage.validateUrl(`?id=${PRODUCT_INDEX}`);
+    ProductDetailsPage.validatePage();
+    ProductDetailsPage.validateIdCorrespondence(PRODUCT_INDEX);
   });
 
   it("voltar para lista de produtos", () => {
     CatalogPage.productItemTitle(PRODUCT_INDEX).click();
+    ProductDetailsPage.validatePage();
     ProductDetailsPage.backToCatalogButton().click();
     expect(CatalogPage.catalogContainer().should("be.visible"));
   });

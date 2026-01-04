@@ -1,7 +1,7 @@
 import { BasePage } from "..";
 import { catalogSelectors } from "../../support/constants/catalog.constants";
 
-export class CatalogBasePage extends BasePage {
+export abstract class CatalogBasePage extends BasePage {
   catalogContainer() {
     return cy.get(catalogSelectors.catalogContainer);
   }
@@ -17,4 +17,4 @@ export class CatalogBasePage extends BasePage {
   }
 }
 
-export default new CatalogBasePage();
+export default CatalogBasePage;

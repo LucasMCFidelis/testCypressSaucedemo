@@ -1,9 +1,11 @@
 import { globalSelectors } from "../support/constants/global.constants";
 
-export class BasePage {
-  validateUrl(path: string) {
+export abstract class BasePage {
+  protected validateUrl(path: string) {
     cy.url().should("contain", path);
   }
+
+  abstract validatePage(): void;
 
   validateCookie(key: string) {
     cy.getCookie(key).should("exist");
@@ -22,4 +24,4 @@ export class BasePage {
   }
 }
 
-export default new BasePage();
+export default BasePage;

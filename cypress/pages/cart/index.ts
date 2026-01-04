@@ -3,8 +3,12 @@ import { cartSelectors } from "../../support/constants/cart.constants";
 import Header from "../components/header";
 
 class CartPage extends BasePage {
+  validatePage(): void {
+    this.validateUrl("cart")
+  }
+
   visit() {
-    Header.openCart()
+    Header.openCart();
   }
 
   cartItemsList() {
