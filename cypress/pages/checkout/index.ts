@@ -3,7 +3,7 @@ import { checkoutSelectors } from "../../support/constants/checkout.constants";
 
 export class CheckoutBasePage extends BasePage {
   cancelCheckout(){
-    cy.get(checkoutSelectors.cancelCheckout).click();
+    cy.get(checkoutSelectors.cancelCheckout).should("be.visible").click();
   }
 }
 

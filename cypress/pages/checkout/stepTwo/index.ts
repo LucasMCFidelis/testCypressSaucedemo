@@ -1,10 +1,17 @@
-import { userCheckout } from "../../../../types/userCheckout";
 import { checkoutSelectors } from "../../../support/constants/checkout.constants";
 import { CheckoutBasePage } from "..";
 
 export class CheckoutStepTwoPage extends CheckoutBasePage {
   private convertValueToFloat(value: string) {
     return parseFloat(value.replace(/[^\d.]/g, ""));
+  }
+
+  private getValue(element: Cypress.Chainable<JQuery<HTMLElement>>) {
+    return element.invoke("text").then(this.convertValueToFloat);
+  }
+
+  validatePage(){
+    this.validateUrl("checkout-step-two")
   }
 
   subTotalLabel() {
@@ -19,33 +26,24 @@ export class CheckoutStepTwoPage extends CheckoutBasePage {
     return cy.get(checkoutSelectors.stepTwo.total);
   }
 
+  finishButton() {
+    return cy.get(checkoutSelectors.stepTwo.finish);
+  }
+
   subTotalValue() {
-    return this.subTotalLabel()
-      .invoke("text")
-      .then((text) => {
-        return this.convertValueToFloat(text);
-      });
+    return this.getValue(this.subTotalLabel());
   }
 
   taxValue() {
-    return this.taxLabel()
-      .invoke("text")
-      .then((text) => {
-        return this.convertValueToFloat(text);
-      });
+    return this.getValue(this.taxLabel());
   }
 
   totalValue() {
-    return this.totalLabel()
-      .invoke("text")
-      .then((text) => {
-        return this.convertValueToFloat(text);
-      });
+    return this.getValue(this.totalLabel());
   }
 
   finishCheckout() {
-    cy.get(checkoutSelectors.stepTwo.finish).should("exist");
-    cy.get(checkoutSelectors.stepTwo.finish).click();
+    this.finishButton().should("exist").click();
   }
 }
 

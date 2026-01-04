@@ -1,4 +1,3 @@
-import { BasePage } from "../..";
 import { userCheckout } from "../../../../types/userCheckout";
 import { checkoutSelectors } from "../../../support/constants/checkout.constants";
 import { CheckoutBasePage } from "..";
@@ -16,9 +15,12 @@ export class CheckoutStepOnePage extends CheckoutBasePage {
     return cy.get(checkoutSelectors.stepOne.postalCode);
   }
 
+  continueButton() {
+    return cy.get(checkoutSelectors.stepOne.continue);
+  }
+
   nextStep() {
-    cy.get(checkoutSelectors.stepOne.continue).should("exist");
-    cy.get(checkoutSelectors.stepOne.continue).click();
+    this.continueButton().should("exist").click();
   }
 
   fillCheckout({ firstName, lastName, postalCode }: userCheckout) {
