@@ -1,28 +1,31 @@
+import LoginPage from "../pages/login";
+import CartPage from "../pages/cart";
+import Header from "../pages/components/header";
+import BasePage from "../pages";
 describe("Comprar de item - ", () => {
   beforeEach(() => {
-    cy.login();
+    LoginPage.loginAsValidUser(validUser());
   });
 
   it("valida botão do carrinho", () => {
-    cy.openCart();
+    Header.shoppingCart().click();
+    CartPage.validateUrl("cart");
   });
 
   it("com carrinho vazio", () => {
-    cy.openCart();
+    CartPage.visit();
 
-    cy.get('[data-test="cart-list"]')
-      .find('[data-test="inventory-item"]')
-      .should("not.exist");
+    CartPage.cartItemsList().should("not.exist");
 
-    cy.get('[data-test="checkout"]').click();
-    cy.url().should("not.include", "cart");
+    CartPage.goToCheckout();
+    BasePage.validateUrl("cart");
   });
 
   it("valida botão de retornar para shopping", () => {
-    cy.openCart();
+    CartPage.visit();
 
-    cy.get('[data-test="continue-shopping"]').click();
-    cy.get('[data-test="inventory-container"]').should("be.visible");
+    CartPage.backToCatalog();
+    BasePage.validateUrl("inventory");
   });
 
   describe("Checkout da compra - ", () => {

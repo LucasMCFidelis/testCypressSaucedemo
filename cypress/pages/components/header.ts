@@ -9,6 +9,10 @@ class Header {
     return cy.get(headerSelectors.shoppingCart);
   }
 
+  openCart(){
+    this.shoppingCart().click()
+  }
+
   shoppingCartBadgeValue() {
     return this.shoppingCart().then(($cart) => {
       const $badge = $cart.find(headerSelectors.shoppingCartBadge);
