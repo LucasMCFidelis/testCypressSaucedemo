@@ -1,5 +1,9 @@
 import { FooterButton } from "../../../types/footerButton";
 
+export const globalSelectors = {
+  errorMessage: '[data-test="error"]',
+};
+
 const menuOptionsSelectors = {
   openMenu: "#react-burger-menu-btn",
   contentMenu: ".bm-menu-wrap",

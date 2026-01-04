@@ -24,10 +24,6 @@ class LoginPage extends BasePage {
     return cy.get(loginSelectors.loginButton);
   }
 
-  errorMessage() {
-    return cy.get(loginSelectors.errorMessage);
-  }
-
   fillUserNameInput(username?: string) {
     if (username) {
       this.userNameInput().type(username);
@@ -57,10 +53,6 @@ class LoginPage extends BasePage {
     this.visit();
     this.fillForm(user);
     this.submit();
-  }
-
-  shouldShowErrorText(text: string) {
-    this.errorMessage().should("contain", text);
   }
 }
 

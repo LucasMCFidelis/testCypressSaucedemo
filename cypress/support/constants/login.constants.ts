@@ -9,7 +9,6 @@ export const loginSelectors = {
   username: '[data-test="username"]',
   password: '[data-test="password"]',
   loginButton: '[data-test="login-button"]',
-  errorMessage: ".error-message-container",
 };
 
 export const SESSION_COOKIE_KEY = "session-username"
