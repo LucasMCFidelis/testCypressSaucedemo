@@ -10,7 +10,7 @@ const menuOptionsSelectors = {
   logout: '[data-test="logout-sidebar-link"]',
   about: '[data-test="about-sidebar-link"]',
   catalog: '[data-test="inventory-sidebar-link"]',
-  closeMenu: "#react-burger-menu-btn",
+  closeMenu: "#react-burger-cross-btn",
 };
 
 export const headerSelectors = {
