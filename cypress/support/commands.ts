@@ -35,18 +35,3 @@ Cypress.Commands.add("openCart", () => {
     .invoke("text")
     .should("match", /your cart/i);
 });
-
-Cypress.Commands.add(
-  "fillCheckout",
-  ({ firstName, lastName, postalCode }: userCheckout) => {
-    if (firstName) {
-      cy.get('[data-test="firstName"]').type(firstName);
-    }
-    if (lastName) {
-      cy.get('[data-test="lastName"]').type(lastName);
-    }
-    if (postalCode) {
-      cy.get('[data-test="postalCode"]').type(postalCode);
-    }
-  }
-);

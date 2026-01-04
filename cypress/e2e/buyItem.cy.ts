@@ -1,7 +1,13 @@
 import LoginPage from "../pages/login";
+import CatalogPage from "../pages/catalog/home";
 import CartPage from "../pages/cart";
+import { validUser } from "../support/factories/user.factory";
 import Header from "../pages/components/header";
+import { validCheckout } from "../support/factories/checkout.factory";
+import CheckoutStepOnePage from "../pages/checkout/stepOne";
 import BasePage from "../pages";
+import { checkoutErrors } from "../support/constants/checkout.constants";
+
 describe("Comprar de item - ", () => {
   beforeEach(() => {
     LoginPage.loginAsValidUser(validUser());
@@ -29,111 +35,78 @@ describe("Comprar de item - ", () => {
   });
 
   describe("Checkout da compra - ", () => {
-    const validCheckout = {
-      firstName: "Lucas",
-      lastName: "Fidelis",
-      postalCode: "58660000",
-    };
+    const checkoutData = validCheckout();
 
     beforeEach(() => {
-      cy.addItemToCart('[data-test="add-to-cart-sauce-labs-backpack"]')
-      cy.openCart();
-      cy.get('[data-test="checkout"]').click();
-      cy.url().should("contain", "checkout-step-one");
+      CatalogPage.addItemToCart("sauce-labs-backpack");
+      CartPage.visit();
+      CartPage.goToCheckout();
+      CartPage.validateUrl("checkout-step-one");
     });
 
     describe("primeira etapa - ", () => {
       it("Cancelar checkout", () => {
-        cy.get('[data-test="cancel"]').click();
-        cy.url().should("contain", "cart");
+        CheckoutStepOnePage.cancelCheckout();
+        BasePage.validateUrl("cart");
       });
 
       it("sem preencher o formulário", () => {
-        cy.get('[data-test="continue"]').click();
-        cy.get(".error-message-container").should(
-          "contain",
-          "First Name is required"
+        CheckoutStepOnePage.nextStep();
+        CheckoutStepOnePage.shouldShowErrorText(
+          checkoutErrors.firstNameRequired
         );
       });
 
       it("com dados validos", () => {
-        cy.fillCheckout(validCheckout);
-        cy.get('[data-test="continue"]').click();
-        cy.url().should("contain", "checkout-step-two");
-      });
-
-      it("sem preencher firstName", () => {
-        cy.fillCheckout({ ...validCheckout, firstName: undefined });
-        cy.get('[data-test="continue"]').click();
-        cy.get(".error-message-container").should(
-          "contain",
-          "First Name is required"
-        );
+        CheckoutStepOnePage.fillCheckout(checkoutData);
+        CheckoutStepOnePage.nextStep();
+        BasePage.validateUrl("checkout-step-two");
       });
 
       it("com firstName vazio", () => {
-        cy.fillCheckout({
-          ...validCheckout,
+        CheckoutStepOnePage.fillCheckout({
+          ...checkoutData,
           firstName: "",
         });
-        cy.get('[data-test="continue"]').click();
-        cy.get(".error-message-container").should(
-          "contain",
-          "First Name is required"
-        );
-      });
-
-      it("sem preencher lastName", () => {
-        cy.fillCheckout({ ...validCheckout, lastName: undefined });
-        cy.get('[data-test="continue"]').click();
-        cy.get(".error-message-container").should(
-          "contain",
-          "Last Name is required"
+        CheckoutStepOnePage.nextStep();
+        CheckoutStepOnePage.shouldShowErrorText(
+          checkoutErrors.firstNameRequired
         );
       });
 
       it("com lastName vazio", () => {
-        cy.fillCheckout({ ...validCheckout, lastName: "" });
-        cy.get('[data-test="continue"]').click();
-        cy.get(".error-message-container").should(
-          "contain",
-          "Last Name is required"
-        );
-      });
-
-      it("sem preencher postalCode", () => {
-        cy.fillCheckout({ ...validCheckout, postalCode: undefined });
-        cy.get('[data-test="continue"]').click();
-        cy.get(".error-message-container").should(
-          "contain",
-          "Postal Code is required"
+        CheckoutStepOnePage.fillCheckout({ ...checkoutData, lastName: "" });
+        CheckoutStepOnePage.nextStep();
+        CheckoutStepOnePage.shouldShowErrorText(
+          checkoutErrors.lastNameRequired
         );
       });
 
       it("com postalCode vazio", () => {
-        cy.fillCheckout({ ...validCheckout, postalCode: "" });
-        cy.get('[data-test="continue"]').click();
-        cy.get(".error-message-container").should(
-          "contain",
-          "Postal Code is required"
+        CheckoutStepOnePage.fillCheckout({ ...checkoutData, postalCode: "" });
+        CheckoutStepOnePage.nextStep();
+        CheckoutStepOnePage.shouldShowErrorText(
+          checkoutErrors.postalCodeRequired
         );
       });
 
-      it("com postalCode como texto", () => {
-        cy.fillCheckout({ ...validCheckout, postalCode: "Código postal" });
-        cy.get('[data-test="continue"]').click();
-        cy.get(".error-message-container").should(
-          "contain",
-          "Invalid Postal Code"
+      it("com postalCode como texto invalido", () => {
+        CheckoutStepOnePage.fillCheckout({
+          ...checkoutData,
+          postalCode: "Código postal",
+        });
+        CheckoutStepOnePage.nextStep();
+        CheckoutStepOnePage.shouldShowErrorText(
+          checkoutErrors.postalCodeInvalid
         );
       });
     });
 
     describe("segunda etapa - ", () => {
       beforeEach(() => {
-        cy.fillCheckout(validCheckout);
-        cy.get('[data-test="continue"]').click();
-        cy.url().should("contain", "checkout-step-two");
+        CheckoutStepOnePage.fillCheckout(checkoutData);
+        CheckoutStepOnePage.nextStep();
+        BasePage.validateUrl("checkout-step-two");
       });
 
       it("cancelar checkout", () => {
