@@ -8,6 +8,10 @@ class LoginPage extends BasePage {
     cy.visit("/");
   }
 
+  validatePage(): void {
+    this.validateUrl("");
+  }
+
   loginContainer() {
     return cy.get(loginSelectors.loginContainer);
   }
