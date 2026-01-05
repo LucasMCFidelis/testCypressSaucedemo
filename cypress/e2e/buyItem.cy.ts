@@ -5,7 +5,6 @@ import { validUser } from "../support/factories/user.factory";
 import Header from "../pages/components/header";
 import { validCheckout } from "../support/factories/checkout.factory";
 import CheckoutStepOnePage from "../pages/checkout/stepOne";
-import BasePage from "../pages";
 import { checkoutErrors } from "../support/constants/checkout.constants";
 import CheckoutStepTwoPage from "../pages/checkout/stepTwo";
 import CheckoutCompletedPage from "../pages/checkout/completed";

@@ -1,4 +1,3 @@
-import BasePage from "../pages";
 import Footer from "../pages/components/footer";
 import LoginPage from "../pages/login";
 import TermsServicePage from "../pages/termsService";
