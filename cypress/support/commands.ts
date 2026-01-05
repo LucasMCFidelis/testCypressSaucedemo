@@ -2,8 +2,6 @@
 
 import "cypress-real-events/support";
 
-import { userCheckout } from "../../types/userCheckout";
-
 Cypress.Commands.add(
   "checkCursorType",
   (elementSelector: string, cursorTypeRequired: string = "pointer") => {
@@ -24,14 +22,3 @@ Cypress.Commands.add(
       });
   }
 );
-
-Cypress.Commands.add("openCart", () => {
-  cy.get('[data-test="shopping-cart-link"]').should("be.visible");
-
-  cy.checkCursorType('[data-test="shopping-cart-link"]', "pointer");
-
-  cy.get('[data-test="shopping-cart-link"]').click();
-  cy.get('[data-test="secondary-header"]')
-    .invoke("text")
-    .should("match", /your cart/i);
-});
