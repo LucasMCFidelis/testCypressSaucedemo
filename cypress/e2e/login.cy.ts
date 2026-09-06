@@ -1,3 +1,4 @@
+import { userLogin } from "../../types/userLogin";
 import LoginPage from "../pages/login";
 import {
   loginErrors,
@@ -6,7 +7,14 @@ import {
 import { validUser } from "../support/factories/user.factory";
 
 describe("Login - ", () => {
-  const user = validUser();
+  let user: userLogin;
+
+  before(() => {
+    validUser().then((validatedUser) => {
+      user = validatedUser;
+    });
+  });
+
   beforeEach(() => {
     LoginPage.visit();
   });

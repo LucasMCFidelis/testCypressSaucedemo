@@ -11,7 +11,9 @@ import CheckoutCompletedPage from "../pages/checkout/completed";
 
 describe("Comprar de item - ", () => {
   beforeEach(() => {
-    LoginPage.loginAsValidUser(validUser());
+    validUser().then((user) => {
+      LoginPage.loginAsValidUser(user);
+    });
   });
 
   it("valida botão do carrinho", () => {

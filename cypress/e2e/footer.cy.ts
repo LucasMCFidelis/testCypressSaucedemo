@@ -10,7 +10,9 @@ import { validUser } from "../support/factories/user.factory";
 
 describe("Validação do rodapé do site", () => {
   beforeEach(() => {
-    LoginPage.loginAsValidUser(validUser());
+    validUser().then((user) => {
+      LoginPage.loginAsValidUser(user);
+    });
   });
 
   it("Valida exibição do rodapé", () => {

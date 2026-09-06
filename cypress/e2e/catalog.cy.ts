@@ -7,7 +7,9 @@ import Header from "../pages/components/header";
 
 describe("Ordenação de produtos - ", () => {
   beforeEach(() => {
-    LoginPage.loginAsValidUser(validUser());
+    validUser().then((user) => {
+      LoginPage.loginAsValidUser(user);
+    });
     CatalogPage.validatePage();
   });
 
@@ -57,7 +59,9 @@ describe("Detalhes de um produto - ", () => {
   let SELECTED_PRODUCT_TITLE = "";
 
   beforeEach(() => {
-    LoginPage.loginAsValidUser(validUser());
+    validUser().then((user) => {
+      LoginPage.loginAsValidUser(user);
+    });
     CatalogPage.validatePage();
 
     PRODUCT_INDEX = Cypress._.random(0, 5);
@@ -114,7 +118,9 @@ describe("Detalhes de um produto - ", () => {
     Menu.open();
     Menu.logout();
 
-    LoginPage.loginAsValidUser(validUser());
+    validUser().then((user) => {
+      LoginPage.loginAsValidUser(user);
+    });
 
     Header.shoppingCartBadgeValue().then((currentValue) => {
       expect(currentValue).equal(beforeLogoutValue);

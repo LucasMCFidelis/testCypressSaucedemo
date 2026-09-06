@@ -6,7 +6,9 @@ import { validUser } from "../support/factories/user.factory";
 
 describe("Menu de Navegação - ", () => {
   beforeEach(() => {
-    LoginPage.loginAsValidUser(validUser());
+    validUser().then((user) => {
+      LoginPage.loginAsValidUser(user);
+    });
     Menu.open();
   });
 
